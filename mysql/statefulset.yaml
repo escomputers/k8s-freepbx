@@ -58,7 +58,7 @@ spec:
           # Prepare the backup.
           xtrabackup --prepare --target-dir=/var/lib/mysql          
         volumeMounts:
-        - name: mysql-vultr-volume
+        - name: data
           mountPath: /var/lib/mysql
           subPath: mysql
         - name: conf
@@ -76,14 +76,14 @@ spec:
         - name: mysql
           containerPort: 3306
         volumeMounts:
-        - name: mysql-vultr-volume
+        - name: data
           mountPath: /var/lib/mysql
           subPath: mysql
         - name: conf
           mountPath: /etc/mysql/conf.d
         resources:
           requests:
-            cpu: 500m
+            cpu: 350m
             memory: 1Gi
         livenessProbe:
           exec:
@@ -146,7 +146,7 @@ spec:
           exec ncat --listen --keep-open --send-only --max-conns=1 3307 -c \
             "xtrabackup --backup --slave-info --stream=xbstream --host=127.0.0.1 --user=root"          
         volumeMounts:
-        - name: mysql-vultr-volume
+        - name: data
           mountPath: /var/lib/mysql
           subPath: mysql
         - name: conf
@@ -161,7 +161,11 @@ spec:
       - name: config-map
         configMap:
           name: mysql
-  volumes:
-  - name: mysql-vultr-volume
-    persistentVolumeClaim:
-      claimName: mysql-csi-pvc
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi
