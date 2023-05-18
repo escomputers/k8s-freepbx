@@ -8,7 +8,7 @@ spec:
       app: mysql
       app.kubernetes.io/name: mysql
   serviceName: mysql
-  replicas: 3
+  replicas: 2
   template:
     metadata:
       labels:
@@ -66,12 +66,15 @@ spec:
       containers:
       - name: mysql
         image: mysql:5.7
+        # env:
+        #   - name: MYSQL_ROOT_PASSWORD
+        #     valueFrom:
+        #       secretKeyRef:
+        #         name: mysql-password
+        #         key: password
         env:
-          - name: MYSQL_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: mysql-password
-                key: password
+        - name: MYSQL_ALLOW_EMPTY_PASSWORD
+          value: "1"
         ports:
         - name: mysql
           containerPort: 3306
