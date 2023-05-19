@@ -1,7 +1,7 @@
 # k8s-freepbx
 
 ## Storage
-This PoC uses Vultr block storage.
+This PoC uses <a href="https://www.vultr.com/?ref=9460695" target="_blank">Vultr block storage.</a>
 
 1. Create secret to connect to Vultr API, by changing your Personal Access Token within the yaml and then run:
 ```
@@ -40,7 +40,18 @@ kubectl create secret generic mysql-password --from-literal=password=YOURPASSWOR
 ```
 kubectl apply -f mysql/statefulset.yaml
 ```
-The statefulset will claim a 10GB volume.
+
+5. Test connection
+```
+kubectl run mysql-client --image=mysql:5.7 -i -t --rm --restart=Never -- mysql -h mysql-read -e "SHOW DATABASES;"
+```
+
+or
+```
+kubectl run mysql-client-loop --image=mysql:5.7 -i -t --rm --restart=Never --\
+  bash -ic "while sleep 1; do mysql -h mysql-read -e 'SELECT @@server_id,NOW()'; done"
+```
+
 
 ## Freebpx deployment
 1. Create PersistenVolumeClaim
