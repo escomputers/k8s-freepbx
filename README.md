@@ -31,17 +31,12 @@ kubectl apply -f mysql/configmap.yaml
 kubectl apply -f mysql/services.yaml
 ```
 
-3. Create secret:
-```
-kubectl create secret generic mysql-password --from-literal=password=YOURPASSWORD
-```
-
-4. Deploy
+3. Deploy
 ```
 kubectl apply -f mysql/statefulset.yaml
 ```
 
-5. Test connection
+4. Test connection
 ```
 kubectl run mysql-client --image=mysql:5.7 -i -t --rm --restart=Never -- mysql -h mysql-read -e "SHOW DATABASES;"
 ```
