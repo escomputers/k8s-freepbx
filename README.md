@@ -1,28 +1,28 @@
 # k8s-freepbx
-Run <a href="https://www.freepbx.org" target="_blank">FreePBX</a> (<a href="https://www.asterisk.org" target="_blank">Asterisk</a>) on <a href="https://kubernetes.io" target="_blank">Kubernetes.</a>
+Run <a href="https://www.freepbx.org">FreePBX</a> (<a href="https://www.asterisk.org">Asterisk</a>) on <a href="https://kubernetes.io">Kubernetes.</a>
 
 Just pure open source power.
 
 ## Storage
-This PoC uses <a href="https://www.vultr.com/?ref=9460695" target="_blank">Vultr block storage.</a>
+This PoC uses <a href="https://www.vultr.com/?ref=9460695">Vultr block storage.</a>
 
-1. Create secret to connect to Vultr API, by changing your Personal Access Token within the yaml and then run:
+1. Create secret to connect to Vultr API, by changing `api-key` field by inserting your Vultr Personal Access Token, within the yaml and then run
 ```
 kubectl create -f storage/vultr_csi/secret.yaml
 ```
 
-2. Install CSI driver in order to create a new default StorageClass for dynamic volumes provisioning
+2. Install CSI driver in order to create a new default `StorageClass` for dynamic volumes provisioning
 ```
 kubectl apply -f storage/vultr_csi/install_csi-v0.9.0.yaml
 ```
 
-3. Check if StorageClass has been created successfully
+3. Check if resources have been created successfully
 ```
 kubectl get storageclass
 ```
 
 ## Database deployment
-Freepbx requires MySql/MariaDb
+Freepbx requires <a href="https://www.mysql.com">MySql</a> or <a href="https://mariadb.org">MariaDb</a>
 
 A statefulset of 3 replicas with one pod for WRITE operations and the others for READ ops.
 1. Create ConfigMap
@@ -54,29 +54,32 @@ kubectl run mysql-client-loop --image=mysql:5.7 -i -t --rm --restart=Never --\
 
 ## Freebpx deployment
 TODO
-1. Create PersistenVolumeClaim
+
 ```
-kubectl create -f freepbx/pvc.yml
+
 ```
 
 ## Exposing services
-1. Deploy <a href="https://github.com/kubernetes/ingress-nginx" target="_blank">nginx-controller</a> (read cloud provider docs to check features, in most cases a public IP address will be automatically allocated to it)
+1. Deploy <a href="https://github.com/kubernetes/ingress-nginx">nginx-controller</a> (read cloud provider docs to check features, in most cases a public IP address will be automatically allocated to it)
 ```
 kubectl apply -f ingress/nginx-ingress-controller.yaml
 ```
 
-2. Deploy cert-manager for TLS certificates
+2. Install <a href="https://github.com/cert-manager/cert-manager">cert-manager</a> for TLS certificates
 ```
-# TODO
+kubectl apply -f cert-manager/install-v1.12.0.yaml
 ```
 
+3. Install <a href="https://letsencrypt.org">Letsencrypt</a> as issuer, before applying change `email` field within the yaml
+```
+kubectl apply -f letsencrypt/install.yaml
+```
 
 ### KUARD test
-1. Deploy and expose <a href="https://github.com/kubernetes-up-and-running/kuard" target="_blank">KUARD</a> to test nginx-controller (keep order)
+1. Deploy and expose <a href="https://github.com/kubernetes-up-and-running/kuard">KUARD</a> to test nginx-controller (keep order)
 ```
 kubectl apply -f kuard/service.yaml
 kubectl apply -f kuard/deployment.yaml
-kubectl apply -f kuard/ingress.yaml
 ```
 
 2. Check if web server within the pod is running
@@ -85,6 +88,15 @@ kubectl apply -f kuard/ingress.yaml
 kubectl run curl-client --image=curlimages/curl:8.1.0 -i -t --rm --restart=Never -- http://<PODIP>:8080
 ```
 
-3. Check from outside
+3. Create Ingress
+```
+# NO TLS
+kubectl apply -f kuard/ingress.yaml
 
-Open http://YOURINGRESSFQDN
+# WITH TLS
+kubectl apply -f kuard/ingress-tls.yaml
+```
+
+4. Check from outside
+
+Open http://YOURINGRESSFQDN or https://YOURINGRESSFQDN

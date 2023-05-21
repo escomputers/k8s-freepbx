@@ -3,10 +3,15 @@ kind: Ingress
 metadata:
   name: kuard
   annotations:
-    kubernetes.io/ingress.class: "nginx"    
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
     #cert-manager.io/issuer: "letsencrypt-staging"
 
 spec:
+  tls:
+  - hosts:
+    - YOURFQDN
+    secretName: kuard-certificate
   rules:
   - host: YOURFQDN
     http:
