@@ -82,7 +82,7 @@ This step uses HTTP-01 challenge with <a href="https://letsencrypt.org">Letsencr
 kubectl apply -f cert-manager/install-v1.12.0.yaml
 ```
 
-2. Install Letsencrypt as `ClusterIssuer`, before applying change `email` field within the yaml
+2. Deploy Letsencrypt, before applying, change `email` field within the yaml
 ```
 kubectl apply -f letsencrypt/clusterissuer.yaml
 ```
@@ -110,5 +110,6 @@ kubectl apply -f kuard/ingress-tls.yaml
 ```
 
 4. Check from outside
-
+```
 Open http://YOURFQDN or https://YOURFQDN
+```
