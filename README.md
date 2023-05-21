@@ -28,7 +28,7 @@ kubectl get storageclass
 ## Database deployment
 Freepbx requires <a href="https://www.mysql.com">MySql</a> or <a href="https://mariadb.org">MariaDb</a>
 
-A statefulset of 3 replicas with one pod for WRITE operations and the others for READ ops.
+A statefulset of 3 replicas (adjust replicas number according to your needs) with one pod for WRITE operations and the others for READ ops.
 1. Create ConfigMap
 ```
 kubectl apply -f mysql/configmap.yaml
@@ -57,8 +57,7 @@ kubectl run mysql-client-loop --image=mysql:5.7 -i -t --rm --restart=Never --\
 
 
 ## Freebpx deployment
-TODO
-
+1.
 ```
 
 ```
@@ -88,7 +87,7 @@ kubectl apply -f letsencrypt/clusterissuer.yaml
 ```
 
 ### KUARD test (optional)
-1. Expose and deploy <a href="https://github.com/kubernetes-up-and-running/kuard">KUARD</a> to test nginx-controller (keep order)
+1. Expose and deploy <a href="https://github.com/kubernetes-up-and-running/kuard">KUARD</a> to test networking functionality (keep order)
 ```
 kubectl apply -f kuard/service.yaml
 kubectl apply -f kuard/deployment.yaml
