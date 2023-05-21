@@ -3,6 +3,10 @@ Run <a href="https://www.freepbx.org">FreePBX</a> (<a href="https://www.asterisk
 
 Just pure open source power.
 
+## Requirements
+- FQDN
+- Ability to create type A DNS record for FQDN, by inserting public IP address allocated by your cloud provider.
+
 ## Storage
 This PoC uses <a href="https://www.vultr.com/?ref=9460695">Vultr block storage.</a>
 
@@ -16,7 +20,7 @@ kubectl create -f storage/vultr_csi/secret.yaml
 kubectl apply -f storage/vultr_csi/install_csi-v0.9.0.yaml
 ```
 
-3. Check if resources have been created successfully
+3. Check if `StorageClass` have been created successfully
 ```
 kubectl get storageclass
 ```
@@ -65,17 +69,25 @@ TODO
 kubectl apply -f ingress/nginx-ingress-controller.yaml
 ```
 
-2. Install <a href="https://github.com/cert-manager/cert-manager">cert-manager</a> for TLS certificates
+2. Validate `IngressClass`
+```
+kubectl get ingressclass
+```
+
+### TLS (optional but recommended)
+This step uses HTTP-01 challenge with Letsencrypt as `ClusterIssuer`.
+
+1. Install <a href="https://github.com/cert-manager/cert-manager">cert-manager</a> for TLS certificates
 ```
 kubectl apply -f cert-manager/install-v1.12.0.yaml
 ```
 
-3. Install <a href="https://letsencrypt.org">Letsencrypt</a> as issuer, before applying change `email` field within the yaml
+2. Install <a href="https://letsencrypt.org">Letsencrypt</a> as `ClusterIssuer`, before applying change `email` field within the yaml
 ```
-kubectl apply -f letsencrypt/install.yaml
+kubectl apply -f letsencrypt/clusterissuer.yaml
 ```
 
-### KUARD test
+### KUARD test (optional)
 1. Deploy and expose <a href="https://github.com/kubernetes-up-and-running/kuard">KUARD</a> to test nginx-controller (keep order)
 ```
 kubectl apply -f kuard/service.yaml
@@ -88,7 +100,7 @@ kubectl apply -f kuard/deployment.yaml
 kubectl run curl-client --image=curlimages/curl:8.1.0 -i -t --rm --restart=Never -- http://<PODIP>:8080
 ```
 
-3. Create Ingress
+3. Expose services by creating `Ingress`. Before applying, change `hosts` and `host` field in ingress-tls.yaml if you want TLS or `host` field in ingress.yaml (no TLS), by inserting your FQDN
 ```
 # NO TLS
 kubectl apply -f kuard/ingress.yaml
