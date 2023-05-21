@@ -75,20 +75,20 @@ kubectl get ingressclass
 ```
 
 ### TLS (optional but recommended)
-This step uses HTTP-01 challenge with Letsencrypt as `ClusterIssuer`.
+This step uses HTTP-01 challenge with <a href="https://letsencrypt.org">Letsencrypt</a> as `ClusterIssuer`.
 
-1. Install <a href="https://github.com/cert-manager/cert-manager">cert-manager</a> for TLS certificates
+1. Install <a href="https://github.com/cert-manager/cert-manager">cert-manager</a> for managing TLS certificates
 ```
 kubectl apply -f cert-manager/install-v1.12.0.yaml
 ```
 
-2. Install <a href="https://letsencrypt.org">Letsencrypt</a> as `ClusterIssuer`, before applying change `email` field within the yaml
+2. Install Letsencrypt as `ClusterIssuer`, before applying change `email` field within the yaml
 ```
 kubectl apply -f letsencrypt/clusterissuer.yaml
 ```
 
 ### KUARD test (optional)
-1. Deploy and expose <a href="https://github.com/kubernetes-up-and-running/kuard">KUARD</a> to test nginx-controller (keep order)
+1. Expose and deploy <a href="https://github.com/kubernetes-up-and-running/kuard">KUARD</a> to test nginx-controller (keep order)
 ```
 kubectl apply -f kuard/service.yaml
 kubectl apply -f kuard/deployment.yaml
@@ -111,4 +111,4 @@ kubectl apply -f kuard/ingress-tls.yaml
 
 4. Check from outside
 
-Open http://YOURINGRESSFQDN or https://YOURINGRESSFQDN
+Open http://YOURFQDN or https://YOURFQDN
