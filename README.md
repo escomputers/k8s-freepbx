@@ -53,7 +53,7 @@ kubectl run mysql-client-loop --image=mysql:5.7 -i -t --rm --restart=Never --\
 
 
 ## Freebpx deployment
-<h5>TODO</h5>
+TODO
 1. Create PersistenVolumeClaim
 ```
 kubectl create -f freepbx/pvc.yml
@@ -86,4 +86,5 @@ kubectl run curl-client --image=curlimages/curl:8.1.0 -i -t --rm --restart=Never
 ```
 
 3. Check from outside
-Open http://<YOURINGRESSFQDN>
+
+Open http://YOURINGRESSFQDN
