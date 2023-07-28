@@ -5,6 +5,7 @@ Just pure open source power.
 
 ## Requirements
 - FQDN
+- VoIP SIP trunk/trunks (DID/DIDs)
 - Ability to create type A DNS record for FQDN, by inserting public IP address allocated by your cloud provider.
 
 ## Storage

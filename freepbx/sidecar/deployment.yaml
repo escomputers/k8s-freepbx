@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: freepbx-sidecar
+  namespace: freepbx-sidecar
+spec:
+  selector:
+    matchLabels:
+      app: freepbx-sidecar
+      app.kubernetes.io/name: freepbx-sidecar
+  serviceName: freepbx-sidecar
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: freepbx-sidecar
+        app.kubernetes.io/name: freepbx-sidecar
+    spec:
+      containers:
+      - name: alpine-sidecar
+        image: escomputers/freepbx-k8s-sidecar:latest
+        env:
+        - name: VAULT_ADDR
+          value: ""
+        - name: VAULT_TOKEN
+          value: "" # set Vault token
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+
+

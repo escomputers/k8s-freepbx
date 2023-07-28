@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault-transit
+  namespace: vault
+spec:
+  selector:
+    matchLabels:
+      app: vault-transit
+      app.kubernetes.io/name: vault-transit
+  serviceName: vault-transit
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vault-transit
+        app.kubernetes.io/name: vault-transit
+    spec:
+      containers:
+      - name: vault-transit
+        image: escomputers/freepbx-k8s-vault-transit:latest
+        env:
+        - name: VAULT_ADDR
+          value: "http://127.0.0.1:8200"
+        ports:
+        - name: vault-transit-web
+          containerPort: 8200
+          protocol: TCP
+        volumeMounts:
+        - name: vault-transit
+          mountPath: /vault
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+      volumes:
+      - name: vault-transit
+        emptyDir: {}

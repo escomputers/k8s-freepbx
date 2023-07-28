@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: freepbx
+  namespace: voip
+spec:
+  selector:
+    matchLabels:
+      app: freepbx
+      app.kubernetes.io/name: freepbx
+  serviceName: freepbx
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: freepbx
+        app.kubernetes.io/name: freepbx
+    spec:
+      containers:
+      - name: freepbx
+        image: escomputers/freepbx-k8s:latest
+        ports:
+        - name: freepbx-web
+          containerPort: 80
+          protocol: TCP
+        - name: freepbx-sip
+          containerPort: 5060
+          protocol: UDP
+        - name: freepbx-sip-tls
+          containerPort: 5061
+          protocol: UDP
+        - name: freepbx-pjsip
+          containerPort: 5160
+          protocol: UDP
+        - name: freepbx-pjsip-tls
+          containerPort: 5161
+          protocol: UDP
+        - name: freepbx-ami
+          containerPort: 5038
+          protocol: TCP
+        - name: freepbx-ucp1
+          containerPort: 8001
+          protocol: TCP
+        - name: freepbx-ucp2
+          containerPort: 8003
+          protocol: TCP
+        - name: freepbx-iax
+          containerPort: 4569
+          protocol: UDP
+        volumeMounts:
+        - name: var_data
+          mountPath: /var
+        - name: etc_data
+          mountPath: /etc
+        - name: usr_data
+          mountPath: /usr
+        - name: asterisk_home
+          mountPath: /home/asterisk
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: var_data
+        emptyDir: {}
+      - name: etc_data
+        emptyDir: {}
+      - name: usr_data
+        emptyDir: {}
+      - name: asterisk_home
+        emptyDir: {}
