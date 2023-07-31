@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: freepbx-sidecar-svc
+  namespace: freepbx-sidecar
+  labels:
+    app: freepbx-sidecar
+    app.kubernetes.io/name: freepbx-sidecar
+spec:
+  ports:
+  - name: api
+    port: 8000
+  selector:
+    app: freepbx-sidecar
