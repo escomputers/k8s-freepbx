@@ -8,7 +8,6 @@ spec:
     matchLabels:
       app: freepbx-sidecar
       app.kubernetes.io/name: freepbx-sidecar
-  serviceName: freepbx-sidecar
   replicas: 3
   template:
     metadata:
@@ -18,7 +17,7 @@ spec:
     spec:
       containers:
       - name: alpine-sidecar
-        image: escomputers/freepbx-k8s-sidecar:latest
+        image: escomputers/k8s-freepbx-sidecar:latest
         env:
         - name: VAULT_ADDR
           value: ""
