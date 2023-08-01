@@ -6,4 +6,4 @@ RUN apk update && apk add bash curl jq openssl python3 py3-pip && \
 COPY get-freepbx-credentials.sh /usr/local/bin/get-freepbx-credentials.sh
 COPY main.py  /usr/local/bin/main.py
 
-CMD ["bash", "/usr/local/bin/get-freepbx-credentials.sh"]
+CMD ["python3", "/usr/local/bin/main.py"]
