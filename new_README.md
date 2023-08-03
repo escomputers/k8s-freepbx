@@ -15,19 +15,13 @@ kubectl apply -f namespaces.yaml
 
 ### Mysql setup
 ```bash
-# for minikube
-kubectl apply -f mysql/minikube-pvc.yaml
-# or in case of Vultr block storage
+kubectl apply -f mysql/configmap.yaml
+kubectl apply -f mysql/services.yaml
+
+# in case of Vultr block storage
 kubectl apply -f mysql/pvc.yaml
 kubectl apply -f mysql/pv.yaml
 
 # then
-kubectl apply -f mysql/configmap.yaml
-kubectl apply -f mysql/services.yaml
-
-# minikube
-kubectl apply -f mysql/minikube-statefulset.yaml
-
-# Vultr
 kubectl apply -f mysql/statefulset.yaml
 ```
