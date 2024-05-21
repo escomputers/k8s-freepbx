@@ -18,7 +18,7 @@ spec:
     spec:
       initContainers:
       - name: init-mysql
-        image: mysql:8.0
+        image: mysql:5.7
         command:
         - bash
         - "-c"
@@ -66,7 +66,7 @@ spec:
           mountPath: /etc/mysql/conf.d
       containers:
       - name: mysql
-        image: mysql:8.0
+        image: mysql:5.7
         # env:
         #   - name: MYSQL_ROOT_PASSWORD
         #     valueFrom:
