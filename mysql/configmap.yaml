@@ -1,7 +1,17 @@
+# This ConfigMap provides my.cnf overrides that let you independently control 
+# configuration on the primary MySQL server and its replicas. 
+# In this case, you want the primary server to be able to serve replication logs 
+# to replicas and you want replicas to reject any writes that don't come via replication.
+
+# There's nothing special about the ConfigMap itself that causes different portions 
+# to apply to different Pods. Each Pod decides which portion to look at as it's initializing,
+# based on information provided by the StatefulSet controller
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mysql
+  namespace: mysql
   labels:
     app: mysql
     app.kubernetes.io/name: mysql

@@ -5,42 +5,27 @@ Just pure open source power.
 
 ## Requirements
 - FQDN
-- Ability to create type A DNS record for FQDN, by inserting public IP address allocated by your cloud provider.
+- Ability to create type A DNS record for the public IP address allocated by the cloud provider
 
-## Storage
-This PoC uses <a href="https://www.vultr.com/?ref=9460695">Vultr block storage.</a>
-
-1. Create secret to connect to Vultr API, by changing `api-key` field by inserting your Vultr Personal Access Token, within the yaml and then run
-```
-kubectl create -f storage/vultr_csi/secret.yaml
-```
-
-2. Install CSI driver in order to create a new default `StorageClass` for dynamic volumes provisioning
-```
-kubectl apply -f storage/vultr_csi/install_csi-v0.9.0.yaml
-```
-
-3. Check if `StorageClass` have been created successfully
-```
-kubectl get storageclass
-```
+This PoC is based on <a href="https://www.vultr.com/?ref=9460695">Vultr Kubernetes Engine</a>
 
 ## Database deployment
 Freepbx requires <a href="https://www.mysql.com">MySql</a> or <a href="https://mariadb.org">MariaDb</a>
 
 A statefulset of 3 replicas (adjust replicas number according to your needs) with one pod for WRITE operations and the others for READ ops.
-1. Create ConfigMap
-```
+1. Create Namespace and ConfigMap
+```bash
+kubectl apply -f mysql/namespace.yaml
 kubectl apply -f mysql/configmap.yaml
 ```
 
 2. Create services
-```
+```bash
 kubectl apply -f mysql/services.yaml
 ```
 
 3. Deploy
-```
+```bash
 kubectl apply -f mysql/statefulset.yaml
 ```
 
