@@ -49,43 +49,35 @@ kubectl run mysql-client-loop --image=mysql:5.7 -i -t --rm --restart=Never --\
 
 ## Exposing services
 1. Deploy <a href="https://github.com/kubernetes/ingress-nginx">nginx-controller</a> (read cloud provider docs to check features, in most cases a public IP address will be automatically allocated to it)
-```
-kubectl apply -f ingress/nginx-ingress-controller.yaml
-```
-
-2. Validate `IngressClass`
-```
-kubectl get ingressclass
-```
 
 ### TLS (optional but recommended)
 This step uses HTTP-01 challenge with <a href="https://letsencrypt.org">Letsencrypt</a> as `ClusterIssuer`.
 
 1. Install <a href="https://github.com/cert-manager/cert-manager">cert-manager</a> for managing TLS certificates
-```
+```bash
 kubectl apply -f cert-manager/install-v1.12.0.yaml
 ```
 
 2. Deploy Letsencrypt, before applying, change `email` field within the yaml
-```
+```bash
 kubectl apply -f letsencrypt/clusterissuer.yaml
 ```
 
 ### KUARD test (optional)
 1. Expose and deploy <a href="https://github.com/kubernetes-up-and-running/kuard">KUARD</a> to test networking functionality (keep order)
-```
+```bash
 kubectl apply -f kuard/service.yaml
 kubectl apply -f kuard/deployment.yaml
 ```
 
 2. Check if web server within the pod is running
-```
+```bash
 # PLAIN HTTP
 kubectl run curl-client --image=curlimages/curl:8.1.0 -i -t --rm --restart=Never -- http://<PODIP>:8080
 ```
 
 3. Expose services by creating `Ingress`. Before applying, change `hosts` and `host` field in ingress-tls.yaml if you want TLS or `host` field in ingress.yaml (no TLS), by inserting your FQDN
-```
+```bash
 # NO TLS
 kubectl apply -f kuard/ingress.yaml
 
@@ -94,6 +86,6 @@ kubectl apply -f kuard/ingress-tls.yaml
 ```
 
 4. Check from outside
-```
+```bash
 Open http://YOURFQDN or https://YOURFQDN
 ```
